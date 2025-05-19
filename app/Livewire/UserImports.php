@@ -10,7 +10,7 @@ class UserImports extends Component
 {
     use WithFileUploads;
 
-    public $file;
+    public $files = [];  // plural for multiple files
     public $uploadedFiles = [];
 
     public function mount()
@@ -33,12 +33,14 @@ class UserImports extends Component
     public function upload()
     {
         $this->validate([
-            'file' => 'required|file|max:10240',
+            'files.*' => 'required|file|max:10240',  // validate each file individually
         ]);
 
-        $path = $this->file->store('user-imports', 'public');
+        foreach ($this->files as $file) {
+            $file->store('user-imports', 'public');
+        }
 
-        $this->file = null;
+        $this->files = [];  // reset after upload
         $this->loadFiles();
     }
 

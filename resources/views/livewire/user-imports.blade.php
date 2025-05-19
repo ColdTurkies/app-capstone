@@ -1,19 +1,17 @@
-<div class="space-y-2">
-    <h2 class="font-bold">User Imports</h2>
+<div>
+    <input type="file" wire:model="files" multiple>
 
-    <!-- Upload Form -->
-    <form wire:submit.prevent="upload" class="flex items-center gap-2">
-        <input type="file" wire:model="file" class="text-sm">
-        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded text-sm">Upload</button>
-    </form>
+    <button wire:click="upload" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+        Upload Files
+    </button>
 
-    @error('file') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+    @error('files.*') <span class="error text-red-600">{{ $message }}</span> @enderror
 
-    <!-- Preview List -->
-    <div class="flex gap-2 overflow-x-auto p-1">
+    <div class="mt-4 flex space-x-2 overflow-x-auto">
         @foreach($uploadedFiles as $file)
-            <div class="transform transition hover:-translate-y-1 cursor-pointer">
-                <img src="{{ $file['preview'] }}" class="w-16 h-16 object-cover rounded border" alt="file">
+            <div class="relative w-24 h-24 flex-shrink-0">
+                <img src="{{ $file['preview'] }}" alt="{{ $file['name'] }}" class="w-full h-full object-cover rounded border" />
+                <div class="text-xs text-center truncate">{{ $file['name'] }}</div>
             </div>
         @endforeach
     </div>

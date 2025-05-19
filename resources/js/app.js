@@ -1,4 +1,7 @@
 import './bootstrap';
-import deskDropHandler from './workspace-handler.js';
-window.deskDropHandler = deskDropHandler;
+import Alpine from 'alpinejs';
+import deskDropHandler from './desk-drop-handler';
 
+window.Alpine = Alpine;
+Alpine.data('deskDropHandler', deskDropHandler);
+Alpine.start();
