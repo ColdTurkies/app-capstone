@@ -1,18 +1,19 @@
-<div>
-    <input type="file" wire:model="files" multiple>
+<div class="p-4 border rounded bg-white shadow space-y-4">
+    <h2 class="text-lg font-bold">Import Files</h2>
 
-    <button wire:click="upload" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
-        Upload Files
-    </button>
+    {{-- Upload Form --}}
+    <form wire:submit.prevent="upload" class="space-y-2">
+        <input type="file" wire:model="files" multiple class="block">
+        @error('files.*') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
 
-    @error('files.*') <span class="error text-red-600">{{ $message }}</span> @enderror
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Upload</button>
+    </form>
 
-    <div class="mt-4 flex space-x-2 overflow-x-auto">
-        @foreach($uploadedFiles as $file)
-            <div class="relative w-24 h-24 flex-shrink-0">
-                <img src="{{ $file['preview'] }}" alt="{{ $file['name'] }}" class="w-full h-full object-cover rounded border" />
-                <div class="text-xs text-center truncate">{{ $file['name'] }}</div>
-            </div>
-        @endforeach
-    </div>
+    {{-- File Cards --}}
+    @if(count($uploadedFiles))
+        
+
+    @else
+        <p class="text-sm text-gray-500 italic">No files uploaded yet.</p>
+    @endif
 </div>

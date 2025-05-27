@@ -1,6 +1,9 @@
 <?php
-use Livewire\WithFileUploads;
+
+namespace App\Livewire;
+
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithBroadcasting;
 
@@ -39,7 +42,6 @@ class GroupFiles extends Component
         $this->file = null;
         $this->loadFiles();
 
-        // Broadcast to other users
         $this->emitTo('group-files', 'groupFilesUpdated');
     }
 

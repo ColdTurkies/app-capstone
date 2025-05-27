@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Http\Livewire;
-
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
 
 class UserImports extends Component
 {
     use WithFileUploads;
 
-    public $files = [];  // plural for multiple files
+    public $files = []; // multiple files
     public $uploadedFiles = [];
 
     public function mount()
@@ -20,12 +17,14 @@ class UserImports extends Component
 
     public function loadFiles()
     {
-        $files = Storage::disk('public')->files('user-imports');
+        $this->uploadedFiles = collect(Storage::disk('public')->files('user-imports'))->map(function ($path) {
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $isImage = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
 
-        $this->uploadedFiles = collect($files)->map(function ($path) {
             return [
                 'name' => basename($path),
-                'preview' => asset('storage/' . $path),
+                'preview' => $isImage ? asset('storage/' . $path) : null,
+                'extension' => $ext,
             ];
         })->toArray();
     }
@@ -33,14 +32,14 @@ class UserImports extends Component
     public function upload()
     {
         $this->validate([
-            'files.*' => 'required|file|max:10240',  // validate each file individually
+            'files.*' => 'required|file|max:10240',
         ]);
 
         foreach ($this->files as $file) {
             $file->store('user-imports', 'public');
         }
 
-        $this->files = [];  // reset after upload
+        $this->files = [];
         $this->loadFiles();
     }
 
