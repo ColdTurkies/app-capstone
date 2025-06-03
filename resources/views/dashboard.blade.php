@@ -16,18 +16,15 @@
     <!-- BODY -->
     <div class="flex flex-1 overflow-hidden">
 
-        <!-- LEFT SIDEBAR -->
-        <aside class="w-1/4 bg-gray-100 p-4 flex flex-col gap-6 overflow-y-auto">
-
-            <!-- IMPORTS BOX -->
+        <!-- LEFT SIDEBAR (1/3 width) -->
+        <aside class="w-1/3 bg-gray-100 p-4 flex flex-col gap-6 overflow-y-auto">
+            <!-- ORDER MATTERS HERE -->
             <livewire:user-imports />
-            <!-- GROUPS BOX -->
             <livewire:group-files />
-
         </aside>
 
-        <!-- WORKSPACE -->
-        <main class="flex-1 bg-gray-50 relative overflow-hidden p-4">
+        <!-- WORKSPACE (2/3 width) -->
+        <main class="w-2/3 bg-gray-50 relative overflow-hidden p-4">
             <div id="workspace"
                  class="w-full h-full border border-dashed border-gray-300 rounded-lg relative">
                 <!-- Cards dropped/copied here -->

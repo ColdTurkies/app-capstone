@@ -1,10 +1,11 @@
-<div class="p-2 border rounded bg-gray-50 shadow-sm w-full max-w-[120px] text-center">
-    @if($file['preview'])
-        <img src="{{ $file['preview'] }}" alt="{{ $file['name'] }}" class="w-full h-24 object-cover rounded mb-2">
-    @else
-        <div class="w-full h-24 flex items-center justify-center bg-gray-200 text-gray-500 text-sm rounded mb-2">
-            {{ strtoupper($file['extension'] ?? 'FILE') }}
-        </div>
-    @endif
-    <div class="text-xs text-gray-700 truncate">{{ $file['name'] }}</div>
+<div 
+    x-data 
+    draggable="true"
+    @dragstart.window="$dispatch('drag-file', { file: @js($file) })"
+    class="relative w-[100px] h-[140px] rounded shadow border overflow-hidden bg-white"
+>
+    <img src="{{ $file['preview'] }}" class="object-cover w-full h-full">
+    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs text-center truncate px-1">
+        {{ $file['name'] }}
+    </div>
 </div>

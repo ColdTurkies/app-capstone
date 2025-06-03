@@ -8,7 +8,15 @@
 </head>
 <body class="bg-gray-100">
 
-    @include('components.nav') <!-- Navigation -->
+    <nav class="bg-gray-800 text-white p-4 flex justify-between">
+        <div class="flex gap-4">
+            <a href="/" class="hover:underline">Home</a>
+            <a href="/groups" class="hover:underline">Groups</a>
+            <a href="/login" class="hover:underline">Login</a>
+            <a href="/about" class="hover:underline">About</a>
+        </div>
+    </nav>
+
     
     <div class="flex">
         <!-- Sidebar -->

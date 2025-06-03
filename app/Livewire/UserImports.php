@@ -10,7 +10,7 @@ class UserImports extends Component
 {
     use WithFileUploads;
 
-    public $files = []; // multiple files
+    public $files = [];
     public $uploadedFiles = [];
 
     public function mount()
@@ -19,18 +19,17 @@ class UserImports extends Component
     }
 
     public function loadFiles()
-    {
-        $this->uploadedFiles = collect(Storage::disk('public')->files('user-imports'))->map(function ($path) {
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-            $isImage = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+{
+    $files = Storage::disk('public')->files('user-imports');
 
-            return [
-                'name' => basename($path),
-                'preview' => $isImage ? asset('storage/' . $path) : null,
-                'extension' => $ext,
-            ];
-        })->toArray();
-    }
+    $this->uploadedFiles = collect($files)->map(function ($path) {
+        return [
+            'name' => basename($path),
+            'preview' => asset('storage/' . $path),
+        ];
+    })->toArray();
+}
+
 
     public function upload()
     {
@@ -42,7 +41,7 @@ class UserImports extends Component
             $file->store('user-imports', 'public');
         }
 
-        $this->files = [];
+        $this->files = []; // ← this resets file inputs after upload
         $this->loadFiles();
     }
 
