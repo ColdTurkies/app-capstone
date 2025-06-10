@@ -29,7 +29,8 @@
         </div>
     </div>
 
-    @livewireScripts
+    
     <script src="/js/workspace-handler.js"></script>
+    @livewireScripts
 </body>
 </html>
