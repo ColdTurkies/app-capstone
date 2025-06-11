@@ -1,5 +1,4 @@
 <div>
-{{-- Your existing workspace --}}
 <div 
     x-data="workspaceComponent()" 
     @drag-file.window="addFile($event.detail.file)"

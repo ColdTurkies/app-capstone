@@ -5,7 +5,6 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class UserImports extends Component
 {
@@ -19,14 +18,20 @@ class UserImports extends Component
         $this->loadFiles();
     }
 
+    public function getUploadedFilesJsonProperty()
+    {
+        return json_encode($this->uploadedFiles);
+    }
+
+
     public function loadFiles()
     {
-        $files = Storage::disk('public')->files('user-imports');
+        $paths = Storage::disk('public')->files('user-imports');
 
-        $this->uploadedFiles = collect($files)->map(function ($path) {
+        $this->uploadedFiles = collect($paths)->map(function ($path) {
             return [
                 'name' => basename($path),
-                'preview' => asset('storage/' . $path),
+                'preview' => asset('storage/' . $path), // public link
             ];
         })->toArray();
     }
@@ -37,20 +42,14 @@ class UserImports extends Component
             'files.*' => 'required|file|max:10240',
         ]);
 
-        // clone the array to avoid Livewire mutation issues
-        $uploads = $this->files;
-
-        foreach ($uploads as $file) {
-            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $safeName = \Illuminate\Support\Str::slug($originalName) . '-' . \Illuminate\Support\Str::random(6) . '.' . $extension;
-
-            $file->storeAs('user-imports', $safeName, 'public');
+        foreach ($this->files as $file) {
+            // Save using original name + timestamp to avoid conflicts
+            $filename = now()->format('Ymd_His_') . '_' . $file->getClientOriginalName();
+            $file->storeAs('user-imports', $filename, 'public');
         }
 
-        // clear Livewire input and reload saved list
-        $this->files = [];
-        $this->loadFiles();
+        $this->files = [];       // Clear the input
+        $this->loadFiles();      // Reload persisted files
     }
 
     public function render()
